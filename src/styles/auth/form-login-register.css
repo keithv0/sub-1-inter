@@ -1,0 +1,138 @@
+/* container */
+.container {
+  padding-inline: 32px;
+  margin-inline: auto;
+  max-width: 1300px;
+}
+
+.main-content {
+  padding-block: 15px;
+}
+
+/* login regis */
+.container-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 82vh;
+  padding: 1rem;
+  margin: auto;
+}
+
+.container-flex-form {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.container-flex-form h1 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.container-flex-form p {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.container-flex-form a {
+  text-decoration: none;
+  color: blue;
+  transition: color 0.2s;
+}
+
+.container-flex-form a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.form-group label {
+  color: grey;
+  font-weight: bold;
+  font-size: small;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.2rem;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* form */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  color: black;
+  font-weight: bold;
+  font-size: small;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  border-radius: 0.2rem;
+  padding: 10px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+/* button */
+.confirm-button {
+  background-color: #003B6A;
+  color: white;
+  width: 100%;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#logoutBtn {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  width: 100%;
+  border: 0;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-button:hover,
+#logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
