@@ -7,8 +7,6 @@ const ENDPOINTS = {
 };
 
 export async function userRegister( userData) {
-  // const data = JSON.stringify({ name, email, password });
-
   const response = await fetch(ENDPOINTS.REGISTER, {
     method: 'POST',
     headers: {

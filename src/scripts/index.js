@@ -3,6 +3,7 @@ import '../styles/style.css'
 
 import App from './pages/app.js';
 import './components/header-app.js'
+import './components/footer-app.js'
 
 document.addEventListener('DOMContentLoaded', async () => {
   const app = new App({

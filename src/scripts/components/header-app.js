@@ -13,7 +13,9 @@ class headerApp extends HTMLElement {
               class="brand-name" 
               aria-label="Nama Website"
               href="#/"
-              >Send Message</a>
+            >
+              Send Message
+            </a>
 
             <nav 
               id="navigation-drawer" 
@@ -27,7 +29,9 @@ class headerApp extends HTMLElement {
               id="drawer-button" 
               class="drawer-button"
               aria-label="Tombol Drawer"
-              >☰</button>
+              >
+              ☰
+              </button>
       </div>
     </header>
 

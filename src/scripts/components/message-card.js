@@ -29,7 +29,7 @@ export default class messageCard {
             >
           </div>
           <div class="story-content" aria-label="Informasi tambahan story si ${name}">
-            <h3 class="story-title" style="view-transition-name: story-title-${id}" aria-label="Nama pembuat story">${name}</h3>
+            <h1 class="story-title" style="view-transition-name: story-title-${id}" aria-label="Nama pembuat story">${name}</h1>
             <p class="story-description" aria-label="Deskripsi story" >${description}</p>
             <time datetime="${createdAt}" class="story-date" aria-label="Tanggal dibuat story">
               ${this.#formatDate(createdAt)}

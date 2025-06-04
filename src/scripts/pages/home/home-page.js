@@ -13,16 +13,20 @@ export default class HomePage {
   async render() {
     return `
       <section class="container view-transition-content">
+      
         <div id="globalLoadingOverlay" class="global-loading-overlay" aria-label="Loading content">
           <div class="loading-spinner"></div>
           <div class="loading-text">Memuat konten...</div>
         </div>
+
         <div class="heading--container" aria-label="Heading container">
           <h1 aria-label="Homepage">Homepage</h1>
         </div>
+
         <div class="stories-container" aria-label="Container story pengguna">
           <div class="loading-indicator" aria-label="Loading memuat cerita">Memuat cerita...</div>
         </div>
+        
       </section>
     `;
   }
@@ -58,33 +62,18 @@ export default class HomePage {
 
   #setupSkipLink() {
     const skipLink = document.querySelector('.skip-link');
-    if (skipLink) {
-      if (this.#skipLinkHandler) {
-        skipLink.removeEventListener('click', this.#skipLinkHandler);
-      }
+    const mainContent = document.querySelector('#main-content');
 
-      this.#skipLinkHandler = (event) => {
-        setTimeout(() => {
-          if (this.#storiesContainer) {
-            const firstStoryCard =
-              this.#storiesContainer.querySelector('.story-card');
-            const noStoriesMessage = this.#storiesContainer.querySelector('p');
+    if (!skipLink || !mainContent) return;
 
-            if (firstStoryCard) {
-              firstStoryCard.focus({ preventScroll: true });
-            } else if (noStoriesMessage) {
-              if (!noStoriesMessage.hasAttribute('tabindex')) {
-                noStoriesMessage.setAttribute('tabindex', '-1');
-              }
-              noStoriesMessage.focus({ preventScroll: true });
-            } else {
-              this.#storiesContainer.focus({ preventScroll: true });
-            }
-          }
-        }, 0);
-      };
-      skipLink.addEventListener('click', this.#skipLinkHandler);
+    this.#skipLinkHandler = (event) => {
+      event.prevenDefault();
+      skipLink.blur();
+      mainContent.setAttribute('tabindex', '-1');
+      mainContent.focus();
+      mainContent.scrollIntoView();
     }
+    skipLink.addEventListener('click', this.#skipLinkHandler)
   }
 
   showLoading() {

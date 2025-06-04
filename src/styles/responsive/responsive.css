@@ -25,10 +25,35 @@
   .drawer-button {
     display: none;
   }
+  .footer-content {
+    justify-content: space-between;
+  }
+
+  .footer-container {
+    padding-inline: 50px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  /* footer */
+  .logo-footer {
+    width: 1rem;
+  }
+  .brand-name .title-footer{
+    font-size: 1.3rem;
+  }
+  .footer-content {
+    justify-content: space-between;
+  }
+  .footer-content p {
+    font-size: 0.85rem;
+  }
+  .footer-container {
+    padding-inline: 50px;
+  }
 }
 /* large */
 @media screen and (max-width: 768px) {
-  .container {
+  .container{
     padding-inline: 15px;
   }
 
@@ -216,9 +241,27 @@
     padding: 8px 16px;
     font-size: 0.9rem;
   }
+  /* footer */
+  .logo-footer {
+    width: 1rem;
+  }
+  .brand-name .title-footer{
+    font-size: 0.8rem;
+  }
+  .footer-content p {
+    font-size: 0.6rem;
+  }
+  .footer-container {
+    padding-inline: 50px;
+  }
+
 }
 /* medium */
 @media screen and (max-width: 425px) {
+
+    .brand-name {
+    font-size: 12px;
+  }
   .container {
     padding-inline: 10px;
     margin: 0 5px;
