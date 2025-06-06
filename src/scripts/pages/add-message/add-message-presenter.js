@@ -69,8 +69,17 @@ export default class AddMessagePresenter {
     const description = formData.get('description');
     const photoFile = formData.get('photo');
 
+    const lat = formData.get('lat');
+    const lon = formData.get('lon')
+
     if (!description || !photoFile) {
       this.#view.showSubmitError('Deskripsi dan foto harus diisi!');
+      return;
+    }
+
+    if (!lat || !lon) {
+      this.#view.showSubmitError('lokasi harus dipiih terlebih dahulu di peta');
+      this.#view.hideLoadingIndicatorForSubmit();
       return;
     }
 
@@ -78,8 +87,9 @@ export default class AddMessagePresenter {
     submitFormData.append('description', description);
     submitFormData.append('photo', photoFile);
 
+    submitFormData.append('lat', lat);
+    submitFormData.append('lon', lon);
     try {
-      // Panggil fungsi langsung, bukan melalui object model
       const response = await addNewStory(submitFormData);
       if (response.error) {
         this.#view.showSubmitError('Gagal mengunggah cerita.');

@@ -1,4 +1,3 @@
-// import AddMessagePresenter from './add-story-presenter';
 import AddMessagePresenter from './add-message-presenter';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -489,6 +488,7 @@ export default class AddMessagePage {
 
     await this.#presenter.submitStory(formData);
   }
+  
 
   destroy() {
     if (this.#presenter) {
