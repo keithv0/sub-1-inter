@@ -12,6 +12,7 @@ export default class AddMessagePage {
   #map = null;
   #marker = null;
   #selectedCoords = null;
+  #mediaStream = null;
 
   constructor() {
     this.#presenter = new AddMessagePresenter({ view: this });
@@ -97,6 +98,48 @@ export default class AddMessagePage {
     await this.#presenter.initializeCamera();
   }
 
+  async requestCameraAccess() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error('Kamera tidak didukung oleh browser ini.');
+    }
+    
+    this.#mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' },
+      audio: false,
+    });
+    
+    this.setCameraStream(this.#mediaStream);
+    return this.#mediaStream;
+  }
+
+  requestCurrentLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation tidak didukung oleh browser'));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => resolve(position),
+        (error) => reject(error),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    });
+  }
+
+  stopCameraStream() {
+    if (this.#mediaStream) {
+      this.#mediaStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.#mediaStream = null;
+    }
+  }
+
+  isCameraStreamActive() {
+    return this.#mediaStream && this.#mediaStream.active;
+  }
+
   #initializeMap() {
     if (typeof L === 'undefined') {
       console.error('Leaflet library (L) is not loaded!');
@@ -161,46 +204,38 @@ export default class AddMessagePage {
     useCurrentLocationButton.addTo(this.#map);
   }
 
-  #centerMapOnUserLocation() {
-    if (navigator.geolocation) {
+  async #centerMapOnUserLocation() {
+    try {
       this.showLoadingIndicatorForMap();
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.hideLoadingIndicatorForMap();
-          const { latitude, longitude } = position.coords;
-          this.#map.setView([latitude, longitude], 13);
-
-          this.#selectedCoords = { latitude, longitude };
-          if (this.#marker) {
-            this.#marker.setLatLng([latitude, longitude]);
-          } else {
-            this.#marker = L.marker([latitude, longitude]).addTo(this.#map);
-          }
-          this.#marker
-            .bindPopup(
-              `Lokasi Anda: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-            )
-            .openPopup();
-          const selectedLocationTextElement = document.getElementById(
-            'selectedLocationText'
-          );
-          if (selectedLocationTextElement) {
-            selectedLocationTextElement.textContent = `Lokasi dipilih (saat ini): Lat: ${latitude.toFixed(5)}, Lon: ${longitude.toFixed(5)}`;
-          }
-        },
-        (error) => {
-          this.hideLoadingIndicatorForMap();
-          console.error('Error getting current location for map:', error);
-          this.showLocationError(
-            'Tidak dapat mengambil lokasi Anda saat ini. Pastikan izin lokasi diberikan.'
-          );
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    } else {
-      this.showLocationError(
-        'Fitur Geolocation tidak didukung oleh browser Anda.'
-      );
+      
+      const location = await this.#presenter.getCurrentLocation();
+      
+      this.hideLoadingIndicatorForMap();
+      
+      this.#map.setView([location.latitude, location.longitude], 13);
+      this.#selectedCoords = location;
+      
+      if (this.#marker) {
+        this.#marker.setLatLng([location.latitude, location.longitude]);
+      } else {
+        this.#marker = L.marker([location.latitude, location.longitude]).addTo(this.#map);
+      }
+      
+      this.#marker
+        .bindPopup(
+          `Lokasi Anda: ${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`
+        )
+        .openPopup();
+        
+      const selectedLocationTextElement = document.getElementById('selectedLocationText');
+      if (selectedLocationTextElement) {
+        selectedLocationTextElement.textContent = 
+          `Lokasi dipilih (saat ini): Lat: ${location.latitude.toFixed(5)}, Lon: ${location.longitude.toFixed(5)}`;
+      }
+    } catch (error) {
+      this.hideLoadingIndicatorForMap();
+      console.error('Error getting current location for map:', error);
+      this.showLocationError(error.message);
     }
   }
 
@@ -283,11 +318,19 @@ export default class AddMessagePage {
   }
 
   showCameraError(message) {
-    document.getElementById('errorMessage').textContent = message;
+    const errorElement = document.getElementById('errorMessage');
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+    }
   }
 
   showLocationError(message) {
-    document.getElementById('errorMessage').textContent = message;
+    const errorElement = document.getElementById('errorMessage');
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+    }
   }
 
   showSubmitError(message) {
@@ -331,8 +374,6 @@ export default class AddMessagePage {
     }
   }
 
-
-
   async #compressImageFile(
     file,
     maxWidth = 800,
@@ -364,11 +405,9 @@ export default class AddMessagePage {
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
 
-    
           canvas.toBlob(
             (blob) => {
               if (blob) {
-                
                 const compressedFile = new File([blob], file.name, {
                   type: 'image/jpeg', 
                   lastModified: Date.now(),
@@ -484,21 +523,20 @@ export default class AddMessagePage {
       this.showSubmitError('Lokasi harus dipilih dari peta.');
       this.hideLoadingIndicatorForSubmit();
       console.log('Lokasi tidak dipilih dari peta.');
+      return;
     }
 
     await this.#presenter.submitStory(formData);
   }
-  
 
   destroy() {
     if (this.#presenter) {
       this.#presenter.destroy();
-      // console.log('AddMessagePage: Cleaning up camera resources');
     }
+    this.stopCameraStream(); 
     if (this.#map) {
       this.#map.remove();
       this.#map = null;
     }
-    // console.log('ADD Message PAGE BERSIH');
   }
 }
