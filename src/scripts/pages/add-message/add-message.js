@@ -158,6 +158,10 @@ export default class AddMessagePage {
         '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
 
+    setTimeout(() => {
+      this.#map.invalidateSize();
+    }, 0);
+
     this.#map.on('click', (e) => {
       const { lat, lng } = e.latlng;
       this.#selectedCoords = { latitude: lat, longitude: lng };

@@ -111,7 +111,7 @@ export default class AddMessagePresenter {
     submitFormData.append('lat', latitude.toString());
     submitFormData.append('lon', longitude.toString());
 
-    console.log('Submitting story with coordinates:', { lat: latitude, lon: longitude });
+    // console.log('Submitting story with coordinates:', { lat: latitude, lon: longitude });
 
     try {
       const response = await addNewStory(submitFormData);

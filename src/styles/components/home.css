@@ -1,4 +1,7 @@
 /* Home Page Styles */
+.card-page {
+  padding-inline: 40px;
+}
 .heading--container {
   justify-content: center;
   text-align: center;

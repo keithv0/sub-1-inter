@@ -60,7 +60,6 @@ class App {
   _updateNavigation() {
     const authLinks = isLoggedIn()
       ? `
-      <li><a href="#/map" aria-label="Tombol ke Map Page">Map</a></li>
       <li><a href="#/add-message" aria-label="Tombol ke Add Message Page">Add Message</a><li>
       <li><button id="logoutBtn" aria-label="Tombol Log Out">Logout</button></li>
     `
